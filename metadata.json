@@ -1,0 +1,21 @@
+{
+  "name": "pm-adminvpn",
+  "version": "4.0.2",
+  "author": "Cory Stoker",
+  "license": "Apache-2.0",
+  "summary": "A module for a thing",
+  "source": "https://github.com/Envysion/pm-adminvpn",
+  "project_page": "https://github.com/Envysion/pm-adminvpn",
+  "tags": ["things", "stuff"],
+  "operatingsystem_support": [
+    {
+    "operatingsystem":"RedHat",
+    "operatingsystemrelease":[ "5.0", "6.0" ]
+    },
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "12.04", "10.04" ]
+    }
+   ],
+  "dependencies": []
+}
