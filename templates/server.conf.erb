@@ -1,0 +1,57 @@
+# OpenVPN configuration file for server
+# using SSL/TLS mode and RSA certificates/keys.
+#
+#======================================================
+# Server Settings
+
+# The IP address on which your OpenVPN server listens
+local          <%= scope.lookupvar('adminvpn::params::localip') %>
+#  TEST
+proto          <%= scope.lookupvar('adminvpn::params::admin_protocol') %>
+port           <%= scope.lookupvar('adminvpn::params::admin_port') %>
+dev            tun
+#tun-mtu        1300
+comp-lzo
+duplicate-cn
+
+crl-verify crl.pem
+ca /etc/pki/tls/certs/envysion-cacert.pem
+cert /etc/pki/tls/certs/<%= @fqdn %>.crt
+key /etc/pki/tls/private/<%= @fqdn %>.key  # This file should be kept secret
+dh dh2048.pem
+
+ifconfig-pool-persist /etc/openvpn/ip-pool.txt
+
+mode             server
+server           <%= scope.lookupvar('adminvpn::params::vpn_pool') %> <%= scope.lookupvar('adminvpn::params::vpn_pool_mask') %>
+topology         subnet
+max-clients      <%= scope.lookupvar('adminvpn::params::admin_max_clients') %>
+keepalive        20 100
+persist-tun
+persist-key
+#
+cipher          BF-CBC        # Blowfish (default)
+;cipher         AES-256-CBC
+;cipher         AES-128-CBC   # AES
+;cipher         DES-EDE3-CBC  # Triple-DES
+#
+#logging
+verb           4
+status         /etc/openvpn/status.log
+status-version 2
+mute           5
+log-append     /var/log/openvpn.log
+#======================================================
+# Client Settings
+client-config-dir ccd
+push "route-delay 5"
+push "route 10.138.0.0 255.255.0.0"
+push "route 208.42.253.128 255.255.255.128"
+push "route 172.25.0.0 255.255.0.0"
+push "route 172.26.0.0 255.255.0.0"
+push "route 98.142.144.0 255.255.248.0"
+push "route 10.0.80.0 255.255.255.0"
+push "route 10.0.88.0 255.255.248.0"
+push "dhcp-option DNS <%= @dns1 %>"
+push "dhcp-option DNS <%= @dns2 %>"
+#
